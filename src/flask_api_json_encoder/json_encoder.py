@@ -18,12 +18,13 @@ class JSONEncoder(flask.json.provider.DefaultJSONProvider):
         set: list,
     }
 
-    # a simple cache to reduce the number of look ups
+    # a simple cache to reduce the number of times we loop over `types`
     cache: t.Dict[t.Type, t.Callable[[t.Any], t.Any]] = {}
 
     @classmethod
     def default(cls, o: t.Any) -> t.Any:  # pylint:disable=invalid-name
-        """Encode an object to JSON"""
+        """Convert the values that `DefaultJSONProvider` doesn't understand to
+        json-serializable values"""
         obj_type = type(o)
 
         if obj_type in cls.cache:
@@ -38,4 +39,5 @@ class JSONEncoder(flask.json.provider.DefaultJSONProvider):
         return str(o)
 
     def dumps(self, obj: t.Any, **kwargs: t.Any) -> str:
+        """Encode an object to JSON"""
         return super().dumps(obj, default=JSONEncoder.default, **kwargs)
