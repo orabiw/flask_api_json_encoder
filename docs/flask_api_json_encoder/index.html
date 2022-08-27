@@ -24,12 +24,12 @@
 <section id="section-intro">
 <p>Api JSON encoder</p>
 <p>A JSON encoder that extends <code>FlaskJSONEncoder</code> and supports common data types</p>
-<pre><code class="language-python">from common_flask_json_encoder import Encoder as JSONEncoder
-
+<pre><code class="language-python">from flask import Flask
+import flask_api_json_encoder
 
 def create_app() -&gt; Flask:
     app = Flask(__name__)
-    app.json_encoder = JSONEncoder
+    flask_api_json_encoder.APIJsonEncoder(app)
     return app
 </code></pre>
 <details class="source">
@@ -42,17 +42,16 @@ A JSON encoder that extends `FlaskJSONEncoder` and supports common data types
 
 
 ```python
-from common_flask_json_encoder import Encoder as JSONEncoder
-
+from flask import Flask
+import flask_api_json_encoder
 
 def create_app() -&gt; Flask:
     app = Flask(__name__)
-    app.json_encoder = JSONEncoder
+    flask_api_json_encoder.APIJsonEncoder(app)
     return app
 ```
-
 &#34;&#34;&#34;
-__version__ = &#34;0.1.0&#34;
+__version__ = &#34;0.2.0&#34;
 
 from flask_api_json_encoder.extension import APIJsonEncoder  # noqa:F401
 from flask_api_json_encoder.json_encoder import JSONEncoder  # noqa:F401</code></pre>
