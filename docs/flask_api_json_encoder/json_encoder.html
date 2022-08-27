@@ -40,10 +40,10 @@ class JSONEncoder(flask.json.provider.DefaultJSONProvider):
     &#34;&#34;&#34;A JSON encoder for common types for flask&#34;&#34;&#34;
 
     types: t.Dict[t.Type, t.Callable[[t.Any], t.Any]] = {
-        datetime.datetime: lambda o: o.isoformat(timespec=&#34;milliseconds&#34;),
-        datetime.date: lambda o: o.isoformat(),
+        datetime.datetime: lambda obj: obj.isoformat(timespec=&#34;milliseconds&#34;),
+        datetime.date: lambda obj: obj.isoformat(),
         decimal.Decimal: float,
-        enum.Enum: lambda o: o.value,
+        enum.Enum: lambda obj: obj.value,
         set: list,
     }
 
@@ -83,10 +83,10 @@ class JSONEncoder(flask.json.provider.DefaultJSONProvider):
     &#34;&#34;&#34;A JSON encoder for common types for flask&#34;&#34;&#34;
 
     types: t.Dict[t.Type, t.Callable[[t.Any], t.Any]] = {
-        datetime.datetime: lambda o: o.isoformat(timespec=&#34;milliseconds&#34;),
-        datetime.date: lambda o: o.isoformat(),
+        datetime.datetime: lambda obj: obj.isoformat(timespec=&#34;milliseconds&#34;),
+        datetime.date: lambda obj: obj.isoformat(),
         decimal.Decimal: float,
-        enum.Enum: lambda o: o.value,
+        enum.Enum: lambda obj: obj.value,
         set: list,
     }
 

@@ -11,10 +11,10 @@ class JSONEncoder(flask.json.provider.DefaultJSONProvider):
     """A JSON encoder for common types for flask"""
 
     types: t.Dict[t.Type, t.Callable[[t.Any], t.Any]] = {
-        datetime.datetime: lambda o: o.isoformat(timespec="milliseconds"),
-        datetime.date: lambda o: o.isoformat(),
+        datetime.datetime: lambda obj: obj.isoformat(timespec="milliseconds"),
+        datetime.date: lambda obj: obj.isoformat(),
         decimal.Decimal: float,
-        enum.Enum: lambda o: o.value,
+        enum.Enum: lambda obj: obj.value,
         set: list,
     }
 
