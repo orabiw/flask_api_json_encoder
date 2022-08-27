@@ -1,7 +1,6 @@
-# common_flask_json_encoder
+# flask_api_json_encoder
 
 A JSON encoder that extends `FlaskJSONEncoder` and supports common data types
-
 
 ```python
 import flask_api_json_encoder
