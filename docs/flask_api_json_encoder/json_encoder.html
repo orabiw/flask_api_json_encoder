@@ -47,13 +47,23 @@ class JSONEncoder(flask.json.provider.DefaultJSONProvider):
         set: list,
     }
 
+    # a simple cache to reduce the number of look ups
+    cache: t.Dict[t.Type, t.Callable[[t.Any], t.Any]] = {}
+
     @classmethod
     def default(cls, o: t.Any) -&gt; t.Any:  # pylint:disable=invalid-name
         &#34;&#34;&#34;Encode an object to JSON&#34;&#34;&#34;
+        obj_type = type(o)
+
+        if obj_type in cls.cache:
+            return cls.cache[obj_type](o)
+
         for data_type, encoder in cls.types.items():
             if isinstance(o, data_type):
+                cls.cache[obj_type] = encoder
                 return encoder(o)
 
+        cls.cache[obj_type] = str
         return str(o)
 
     def dumps(self, obj: t.Any, **kwargs: t.Any) -&gt; str:
@@ -90,13 +100,23 @@ class JSONEncoder(flask.json.provider.DefaultJSONProvider):
         set: list,
     }
 
+    # a simple cache to reduce the number of look ups
+    cache: t.Dict[t.Type, t.Callable[[t.Any], t.Any]] = {}
+
     @classmethod
     def default(cls, o: t.Any) -&gt; t.Any:  # pylint:disable=invalid-name
         &#34;&#34;&#34;Encode an object to JSON&#34;&#34;&#34;
+        obj_type = type(o)
+
+        if obj_type in cls.cache:
+            return cls.cache[obj_type](o)
+
         for data_type, encoder in cls.types.items():
             if isinstance(o, data_type):
+                cls.cache[obj_type] = encoder
                 return encoder(o)
 
+        cls.cache[obj_type] = str
         return str(o)
 
     def dumps(self, obj: t.Any, **kwargs: t.Any) -&gt; str:
@@ -109,6 +129,10 @@ class JSONEncoder(flask.json.provider.DefaultJSONProvider):
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="flask_api_json_encoder.json_encoder.JSONEncoder.cache"><code class="name">var <span class="ident">cache</span> : Dict[Type, Callable[[Any], Any]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="flask_api_json_encoder.json_encoder.JSONEncoder.types"><code class="name">var <span class="ident">types</span> : Dict[Type, Callable[[Any], Any]]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -128,10 +152,17 @@ class JSONEncoder(flask.json.provider.DefaultJSONProvider):
 <pre><code class="python">@classmethod
 def default(cls, o: t.Any) -&gt; t.Any:  # pylint:disable=invalid-name
     &#34;&#34;&#34;Encode an object to JSON&#34;&#34;&#34;
+    obj_type = type(o)
+
+    if obj_type in cls.cache:
+        return cls.cache[obj_type](o)
+
     for data_type, encoder in cls.types.items():
         if isinstance(o, data_type):
+            cls.cache[obj_type] = encoder
             return encoder(o)
 
+    cls.cache[obj_type] = str
     return str(o)</code></pre>
 </details>
 </dd>
@@ -177,6 +208,7 @@ parameter defaults from the :attr:<code>default</code>,
 <li>
 <h4><code><a title="flask_api_json_encoder.json_encoder.JSONEncoder" href="#flask_api_json_encoder.json_encoder.JSONEncoder">JSONEncoder</a></code></h4>
 <ul class="">
+<li><code><a title="flask_api_json_encoder.json_encoder.JSONEncoder.cache" href="#flask_api_json_encoder.json_encoder.JSONEncoder.cache">cache</a></code></li>
 <li><code><a title="flask_api_json_encoder.json_encoder.JSONEncoder.default" href="#flask_api_json_encoder.json_encoder.JSONEncoder.default">default</a></code></li>
 <li><code><a title="flask_api_json_encoder.json_encoder.JSONEncoder.dumps" href="#flask_api_json_encoder.json_encoder.JSONEncoder.dumps">dumps</a></code></li>
 <li><code><a title="flask_api_json_encoder.json_encoder.JSONEncoder.types" href="#flask_api_json_encoder.json_encoder.JSONEncoder.types">types</a></code></li>

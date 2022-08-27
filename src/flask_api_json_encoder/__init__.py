@@ -13,7 +13,7 @@ def create_app() -> Flask:
     return app
 ```
 """
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 from flask_api_json_encoder.extension import APIJsonEncoder  # noqa:F401
 from flask_api_json_encoder.json_encoder import JSONEncoder  # noqa:F401

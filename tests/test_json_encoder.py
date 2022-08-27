@@ -13,6 +13,7 @@ class DummyEnum(enum.Enum):
     """dummy enum"""
 
     A = "A"
+    B = "B"
 
 
 class DummyClass:  # pylint:disable=too-few-public-methods,invalid-name
@@ -31,6 +32,7 @@ def test_dumps() -> None:
     today = datetime.date.today()
     now = datetime.datetime.now()
     enum_ = DummyEnum("A")
+    enum_2 = DummyEnum("B")
     decimal_ = decimal.Decimal(3.14)
     set_ = {"1", "2", 3}
 
@@ -39,6 +41,7 @@ def test_dumps() -> None:
         "time": now,
         "something": None,
         "enum": enum_,
+        "enum_2": enum_2,
         "pi": decimal_,
         "set": set_,
         "obj_": obj_,
@@ -52,6 +55,7 @@ def test_dumps() -> None:
     assert result.pop("time") == now.isoformat(timespec="milliseconds")
     assert result.pop("something") is None
     assert result.pop("enum") == enum_.value
+    assert result.pop("enum_2") == enum_2.value
     assert result.pop("pi") == float(decimal_)
     assert result.pop("set") == list(set_)
     assert result.pop("obj_") == str(obj_)
