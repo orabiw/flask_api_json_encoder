@@ -3,7 +3,7 @@ import typing as t
 
 import flask
 
-from flask_api_json_encoder import json_encoder
+import flask_api_json_encoder
 
 
 class APIJsonEncoder:  # pylint:disable=too-few-public-methods
@@ -15,4 +15,4 @@ class APIJsonEncoder:  # pylint:disable=too-few-public-methods
 
     def init_app(self, app: flask.Flask) -> None:
         """initialize the app with the extension"""
-        app.json = json_encoder.JSONEncoder(app)
+        app.json = flask_api_json_encoder.JSONEncoder(app)

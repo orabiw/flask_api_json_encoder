@@ -32,7 +32,7 @@ import typing as t
 
 import flask
 
-from flask_api_json_encoder import json_encoder
+import flask_api_json_encoder
 
 
 class APIJsonEncoder:  # pylint:disable=too-few-public-methods
@@ -44,7 +44,7 @@ class APIJsonEncoder:  # pylint:disable=too-few-public-methods
 
     def init_app(self, app: flask.Flask) -&gt; None:
         &#34;&#34;&#34;initialize the app with the extension&#34;&#34;&#34;
-        app.json = json_encoder.JSONEncoder(app)</code></pre>
+        app.json = flask_api_json_encoder.JSONEncoder(app)</code></pre>
 </details>
 </section>
 <section>
@@ -75,7 +75,7 @@ class APIJsonEncoder:  # pylint:disable=too-few-public-methods
 
     def init_app(self, app: flask.Flask) -&gt; None:
         &#34;&#34;&#34;initialize the app with the extension&#34;&#34;&#34;
-        app.json = json_encoder.JSONEncoder(app)</code></pre>
+        app.json = flask_api_json_encoder.JSONEncoder(app)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -90,7 +90,7 @@ class APIJsonEncoder:  # pylint:disable=too-few-public-methods
 </summary>
 <pre><code class="python">def init_app(self, app: flask.Flask) -&gt; None:
     &#34;&#34;&#34;initialize the app with the extension&#34;&#34;&#34;
-    app.json = json_encoder.JSONEncoder(app)</code></pre>
+    app.json = flask_api_json_encoder.JSONEncoder(app)</code></pre>
 </details>
 </dd>
 </dl>

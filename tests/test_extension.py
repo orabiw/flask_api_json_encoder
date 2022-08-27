@@ -1,15 +1,17 @@
 """ test extension """
 import flask
 
-from flask_api_json_encoder import extension
+import flask_api_json_encoder
 
 
 def test_extension():
     """test extension"""
     app = flask.Flask(__name__)
-    assert extension.APIJsonEncoder(app)
+
+    assert flask_api_json_encoder.APIJsonEncoder(app)
+    assert isinstance(app.json, flask_api_json_encoder.JSONEncoder)
 
 
 def test_extension_no_app():
     """test extension without an app"""
-    assert extension.APIJsonEncoder()
+    assert flask_api_json_encoder.APIJsonEncoder()
