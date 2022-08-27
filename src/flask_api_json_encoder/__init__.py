@@ -15,3 +15,5 @@ def create_app() -> Flask:
 
 """
 __version__ = "0.1.0"
+
+from flask_api_json_encoder.extension import APIJsonEncoder  # noqa:F401

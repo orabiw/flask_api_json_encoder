@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>api_json_encoder API documentation</title>
-<meta name="description" content="Api JSON encoder …" />
+<title>flask_api_json_encoder.json_encoder API documentation</title>
+<meta name="description" content="JSON encoder." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -19,56 +19,146 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Package <code>api_json_encoder</code></h1>
+<h1 class="title">Module <code>flask_api_json_encoder.json_encoder</code></h1>
 </header>
 <section id="section-intro">
-<p>Api JSON encoder</p>
-<p>A JSON encoder that extends <code>FlaskJSONEncoder</code> and supports common data types</p>
-<pre><code class="language-python">from common_flask_json_encoder import Encoder as JSONEncoder
-
-
-def create_app() -&gt; Flask:
-    app = Flask(__name__)
-    app.json_encoder = JSONEncoder
-    return app
-</code></pre>
+<p>JSON encoder.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34; Api JSON encoder
+<pre><code class="python">&#34;&#34;&#34; JSON encoder. &#34;&#34;&#34;
+import datetime
+import decimal
+import enum
+import typing as t
 
-A JSON encoder that extends `FlaskJSONEncoder` and supports common data types
+import flask.json
 
 
-```python
-from common_flask_json_encoder import Encoder as JSONEncoder
+class JSONEncoder(flask.json.provider.DefaultJSONProvider):
+    &#34;&#34;&#34;A JSON encoder for common types for flask&#34;&#34;&#34;
 
+    types: t.Dict[t.Type, t.Callable[[t.Any], t.Any]] = {
+        datetime.datetime: lambda o: o.isoformat(timespec=&#34;milliseconds&#34;),
+        datetime.date: lambda o: o.isoformat(),
+        decimal.Decimal: float,
+        enum.Enum: lambda o: o.value,
+        set: list,
+    }
 
-def create_app() -&gt; Flask:
-    app = Flask(__name__)
-    app.json_encoder = JSONEncoder
-    return app
-```
+    @classmethod
+    def default(cls, o: t.Any) -&gt; t.Any:  # pylint:disable=invalid-name
+        &#34;&#34;&#34;Encode an object to JSON&#34;&#34;&#34;
+        for data_type, encoder in cls.types.items():
+            if isinstance(o, data_type):
+                return encoder(o)
 
-&#34;&#34;&#34;
-__version__ = &#34;0.1.0&#34;</code></pre>
+        return str(o)
+
+    def dumps(self, obj: t.Any, **kwargs: t.Any) -&gt; str:
+        return super().dumps(obj, default=JSONEncoder.default, **kwargs)</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt><code class="name"><a title="api_json_encoder.json_encoder" href="json_encoder.html">api_json_encoder.json_encoder</a></code></dt>
+<dt id="flask_api_json_encoder.json_encoder.JSONEncoder"><code class="flex name class">
+<span>class <span class="ident">JSONEncoder</span></span>
+<span>(</span><span>app: Flask)</span>
+</code></dt>
 <dd>
-<div class="desc"><p>JSON encoder.</p></div>
+<div class="desc"><p>A JSON encoder for common types for flask</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class JSONEncoder(flask.json.provider.DefaultJSONProvider):
+    &#34;&#34;&#34;A JSON encoder for common types for flask&#34;&#34;&#34;
+
+    types: t.Dict[t.Type, t.Callable[[t.Any], t.Any]] = {
+        datetime.datetime: lambda o: o.isoformat(timespec=&#34;milliseconds&#34;),
+        datetime.date: lambda o: o.isoformat(),
+        decimal.Decimal: float,
+        enum.Enum: lambda o: o.value,
+        set: list,
+    }
+
+    @classmethod
+    def default(cls, o: t.Any) -&gt; t.Any:  # pylint:disable=invalid-name
+        &#34;&#34;&#34;Encode an object to JSON&#34;&#34;&#34;
+        for data_type, encoder in cls.types.items():
+            if isinstance(o, data_type):
+                return encoder(o)
+
+        return str(o)
+
+    def dumps(self, obj: t.Any, **kwargs: t.Any) -&gt; str:
+        return super().dumps(obj, default=JSONEncoder.default, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>flask.json.provider.DefaultJSONProvider</li>
+<li>flask.json.provider.JSONProvider</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="flask_api_json_encoder.json_encoder.JSONEncoder.types"><code class="name">var <span class="ident">types</span> : Dict[Type, Callable[[Any], Any]]</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
+<h3>Static methods</h3>
+<dl>
+<dt id="flask_api_json_encoder.json_encoder.JSONEncoder.default"><code class="name flex">
+<span>def <span class="ident">default</span></span>(<span>o: Any) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Encode an object to JSON</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def default(cls, o: t.Any) -&gt; t.Any:  # pylint:disable=invalid-name
+    &#34;&#34;&#34;Encode an object to JSON&#34;&#34;&#34;
+    for data_type, encoder in cls.types.items():
+        if isinstance(o, data_type):
+            return encoder(o)
+
+    return str(o)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="flask_api_json_encoder.json_encoder.JSONEncoder.dumps"><code class="name flex">
+<span>def <span class="ident">dumps</span></span>(<span>self, obj: Any, **kwargs: Any) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Serialize data as JSON to a string.</p>
+<p>Keyword arguments are passed to :func:<code>json.dumps</code>. Sets some
+parameter defaults from the :attr:<code>default</code>,
+:attr:<code>ensure_ascii</code>, and :attr:<code>sort_keys</code> attributes.</p>
+<p>:param obj: The data to serialize.
+:param kwargs: Passed to :func:<code>json.dumps</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dumps(self, obj: t.Any, **kwargs: t.Any) -&gt; str:
+    return super().dumps(obj, default=JSONEncoder.default, **kwargs)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -77,9 +167,21 @@ __version__ = &#34;0.1.0&#34;</code></pre>
 <ul></ul>
 </div>
 <ul id="index">
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3>Super-module</h3>
 <ul>
-<li><code><a title="api_json_encoder.json_encoder" href="json_encoder.html">api_json_encoder.json_encoder</a></code></li>
+<li><code><a title="flask_api_json_encoder" href="index.html">flask_api_json_encoder</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="flask_api_json_encoder.json_encoder.JSONEncoder" href="#flask_api_json_encoder.json_encoder.JSONEncoder">JSONEncoder</a></code></h4>
+<ul class="">
+<li><code><a title="flask_api_json_encoder.json_encoder.JSONEncoder.default" href="#flask_api_json_encoder.json_encoder.JSONEncoder.default">default</a></code></li>
+<li><code><a title="flask_api_json_encoder.json_encoder.JSONEncoder.dumps" href="#flask_api_json_encoder.json_encoder.JSONEncoder.dumps">dumps</a></code></li>
+<li><code><a title="flask_api_json_encoder.json_encoder.JSONEncoder.types" href="#flask_api_json_encoder.json_encoder.JSONEncoder.types">types</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

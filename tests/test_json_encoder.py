@@ -6,7 +6,7 @@ import json
 
 import flask
 
-from api_json_encoder import json_encoder
+from flask_api_json_encoder import json_encoder
 
 
 class DummyEnum(enum.Enum):
